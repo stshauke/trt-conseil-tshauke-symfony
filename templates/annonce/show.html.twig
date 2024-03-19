@@ -1,0 +1,78 @@
+
+
+
+  
+
+
+
+{% extends 'base.html.twig' %}
+ 
+{% block title %}Annonce{% endblock %}
+ 
+{% block body %}
+    <div class="container">
+        <h2 class="text-center mt-5 mb-3">Afficher liste des modules</h2>
+        <div class="card">
+            <div class="card-header">
+                <div class="text-center">
+               
+                   <h3 class="text-primary"> Affichage de l'annonce numéro: <b> {{ annonce.id}}</b></h3>
+                </div>
+            </div>
+            <div class="card-body">
+    <div class="row">
+    <div class="col-sm-3">
+        <b >ID:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ annonce.id}}</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <b >Description:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ annonce.descriptionAnnonce }}</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <b >Lieu de travail:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ annonce.lieuTravail }}</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <b >Date annonce:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ annonce.dateAnnonce ? annonce.dateAnnonce|date('Y-m-d') : '' }}</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <b >Status:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ annonce.status ? 'Yes' : 'No' }}</p>
+    </div>
+</div>
+            
+</div>
+
+             <div class="card-footer">
+              <div class="text-center">
+                    <a href="{{ path('app_annonce_index') }}" class="btn btn-secondary me-2">Retour à la liste</a>
+                    <a href="{{ path('app_annonce_edit', {'id': annonce.id}) }}" class="btn btn-primary">Edit</a>
+                </div>
+             </div>
+        </div>
+    </div>
+{% endblock %}
