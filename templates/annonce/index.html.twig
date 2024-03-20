@@ -6,7 +6,7 @@
     <div class="container">
         <h2 class="text-center mt-5 mb-3">Liste des annonces</h2>
         <div class="card">
-            <div class="card-header">
+            {# <div class="card-header">
                 <a class="btn btn-outline-primary" href="{{ path('app_annonce_new') }}">
                             <i class="fas fa-plus"></i> <!-- Icône pour créer un nouveau module -->
                         </a>
@@ -14,7 +14,28 @@
                
                    <h3 class="text-primary"> Liste des annonces</h3>
                 </div>
-            </div>
+            </div> #}
+            <div class="card-header">
+                        <div class="row justify-content-between">
+                                           <h3 class="text-primary text-center"> Liste des annonces</h3>
+
+                            <div class="col-sm-auto">
+                                <a class="btn btn-outline-primary" href="{{ path('app_annonce_new') }}">
+                                    <i class="fas fa-plus"></i> <!-- Icône pour créer un nouveau module -->
+                                </a>
+                            </div>
+                            <div class="col-sm-auto">
+                                <form class="d-flex" role="search" id="searchForm">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control me-2" placeholder="Recherche..." name="search" id="searchInput">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-success ml-2">
+                                        <i class="fas fa-search"></i> <!-- Icône de recherche -->
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
             <div class="card-body">
                 <table class="table table-bordered">
                     <tr>
@@ -27,7 +48,7 @@
                 <th>Status</th>                        
                         <th width="240px">Action</th>
                     </tr>
-                     {% for annonce in annonces %}
+                     {% for annonce  in pagination %}
                     <tr>
                        <td>{{ annonce.id }}</td>
 <td>{{ annonce.utilisateur.prenom }} {{ annonce.utilisateur.nom }}</td>
@@ -52,6 +73,10 @@
                     </tr>
                     {% endfor %}
                 </table>
+                <div class="d-flex justify-content-center">
+                        {# Affichage de la pagination générée par knp_paginator #}
+                        {{ knp_pagination_render(pagination,'pagination.html.twig') }}
+                    </div>
             </div>
         </div>
     </div>
