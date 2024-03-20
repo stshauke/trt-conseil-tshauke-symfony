@@ -52,8 +52,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Annonce::class, mappedBy: 'Utilisateur', orphanRemoval: true)]
     private Collection $annonces;
 
-    #[ORM\OneToMany(targetEntity: ProfilRecruteur::class, mappedBy: 'Utilisateur', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ProfilRecruteur::class, mappedBy: 'utilisateur')]
     private Collection $profilRecruteurs;
+
 
     public function __construct()
     {
@@ -142,37 +143,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
-    // public function getTypeUtilisateur(): ?string
-    // {
-    //    // return $this->typeUtilisateur;
-    // }
-
-    // public function setTypeUtilisateur(string $typeUtilisateur): static
-    // {
-    //     $this->typeUtilisateur = $typeUtilisateur;
-
-    //     return $this;
-    // }
-
-    // public function isStatus(): ?bool
-    // {
-    //     return $this->status;
-    // }
-
-    // public function setStatus(bool $status): static
-    // {
-    //     $this->status = $status;
-
-    //     return $this;
-    // }
-
-    
-    
-
-  
-
-  
 
     public function getNom(): ?string
     {

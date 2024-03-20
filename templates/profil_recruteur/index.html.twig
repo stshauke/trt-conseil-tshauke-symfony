@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProfilRecruteur index{% endblock %}
+
+{% block body %}
+    <h1>ProfilRecruteur index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomEntreprise</th>
+                <th>AdresseEntreprise</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for profil_recruteur in profil_recruteurs %}
+            <tr>
+                <td>{{ profil_recruteur.id }}</td>
+                <td>{{ profil_recruteur.nomEntreprise }}</td>
+                <td>{{ profil_recruteur.adresseEntreprise }}</td>
+                <td>
+                    <a href="{{ path('app_profil_recruteur_show', {'id': profil_recruteur.id}) }}">show</a>
+                    <a href="{{ path('app_profil_recruteur_edit', {'id': profil_recruteur.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_profil_recruteur_new') }}">Create new</a>
+{% endblock %}

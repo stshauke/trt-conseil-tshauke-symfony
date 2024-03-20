@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\ProfilRecruteur;
-use App\Entity\Utilisateur;
+use App\Entity\utilisateur;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,8 +16,8 @@ class ProfilRecruteurType extends AbstractType
         $builder
             ->add('nomEntreprise')
             ->add('adresseEntreprise')
-            ->add('Utilisateur', EntityType::class, [
-                'class' => Utilisateur::class,
+            ->add('utilisateur', EntityType::class, [
+                'class' => utilisateur::class,
 'choice_label' => 'id',
             ])
         ;

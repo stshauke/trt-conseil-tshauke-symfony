@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ProfilRecruteurRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProfilRecruteurRepository::class)]
@@ -21,11 +19,8 @@ class ProfilRecruteur
     #[ORM\Column(length: 255)]
     private ?string $adresseEntreprise = null;
 
-
     #[ORM\ManyToOne(inversedBy: 'profilRecruteurs')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Utilisateur $Utilisateur = null;
-
+    private ?utilisateur $utilisateur = null;
 
     public function getId(): ?int
     {
@@ -56,18 +51,15 @@ class ProfilRecruteur
         return $this;
     }
 
-
-    public function getUtilisateur(): ?Utilisateur
+    public function getUtilisateur(): ?utilisateur
     {
-        return $this->Utilisateur;
+        return $this->utilisateur;
     }
 
-    public function setUtilisateur(?Utilisateur $Utilisateur): static
+    public function setUtilisateur(?utilisateur $utilisateur): static
     {
-        $this->Utilisateur = $Utilisateur;
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
-
-    
 }
