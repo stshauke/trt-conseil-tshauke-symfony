@@ -55,11 +55,15 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: ProfilRecruteur::class, mappedBy: 'utilisateur')]
     private Collection $profilRecruteurs;
 
+    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'Utilisateur')]
+    private Collection $candidatures;
+
 
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
         $this->profilRecruteurs = new ArrayCollection();
+        $this->candidatures = new ArrayCollection();
     }
 
     
@@ -246,6 +250,36 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($profilRecruteur->getUtilisateur() === $this) {
                 $profilRecruteur->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Candidature>
+     */
+    public function getCandidatures(): Collection
+    {
+        return $this->candidatures;
+    }
+
+    public function addCandidature(Candidature $candidature): static
+    {
+        if (!$this->candidatures->contains($candidature)) {
+            $this->candidatures->add($candidature);
+            $candidature->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidature(Candidature $candidature): static
+    {
+        if ($this->candidatures->removeElement($candidature)) {
+            // set the owning side to null (unless already changed)
+            if ($candidature->getUtilisateur() === $this) {
+                $candidature->setUtilisateur(null);
             }
         }
 

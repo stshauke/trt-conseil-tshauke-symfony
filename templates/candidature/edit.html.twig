@@ -1,0 +1,45 @@
+{# {% extends 'base.html.twig' %}
+
+{% block title %}Edit Candidature{% endblock %}
+
+{% block body %}
+    <h1>Edit Candidature</h1>
+
+    {{ include('candidature/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_candidature_index') }}">back to list</a>
+
+    {{ include('candidature/_delete_form.html.twig') }}
+{% endblock %} #}
+
+{% extends 'base.html.twig' %}
+ 
+{% block title %}candidature{% endblock %}
+ 
+{% block body %}
+    <div class="container">
+        <h2 class="text-center mt-5 mb-5"></h2>
+        <div class="card">
+            <div class="card-header">
+                <div class="text-center">
+               
+                   <h3 class="text-primary"> Modification de l'candidature numéro: <b> {{ candidature.id}}</b></h3>
+                </div>
+            </div>
+            <div class="card-body">
+
+                {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    
+            
+            </div>
+             <div class="card-footer">
+              <div class="text-center">
+                    <a href="{{ path('app_candidature_index') }}" class="btn btn-outline-secondary me-2">Retour à la liste</a>
+                   <button class="btn btn-outline-success me-2">{{ button_label|default('Mettre à jour') }}</button>
+                {{ form_end(form) }}
+                </div>
+             </div>
+        </div>
+    </div>
+{% endblock %}
