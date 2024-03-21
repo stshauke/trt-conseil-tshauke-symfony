@@ -18,19 +18,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Twig\Environment;
+
+
 class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
     private $authorizationChecker;
     private $urlGenerator;
-
+    private $templating;
+    private $twig;
     public const LOGIN_ROUTE = 'app_login';
+    
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, UrlGeneratorInterface $urlGenerator)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, UrlGeneratorInterface $urlGenerator, Environment $twig)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->urlGenerator = $urlGenerator;
+        $this->twig = $twig;
     }
 
     public function authenticate(Request $request): Passport
@@ -52,17 +58,17 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     {
         $user = $token->getUser();
         
-        if ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-            return new RedirectResponse($this->urlGenerator->generate('app_admin'));
-        } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CONSULTANT')) {
-            return new RedirectResponse($this->urlGenerator->generate('app_consultant'));
-        } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CANDIDAT')) {
-            return new RedirectResponse($this->urlGenerator->generate('app_candidat'));
-        } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ENTREPRENEUR')) {
-            return new RedirectResponse($this->urlGenerator->generate('app_recruteur'));
-        }
+        // if ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+        //                return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
+        // } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CONSULTANT')) {
+        //     return new RedirectResponse($this->urlGenerator->generate('app_consultant'));
+        // } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CANDIDAT')) {
+        //     return new RedirectResponse($this->urlGenerator->generate('app_candidat'));
+        // } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ENTREPRENEUR')) {
+        //     return new RedirectResponse($this->urlGenerator->generate('app_recruteur'));
+        // }
         
-        return new RedirectResponse($this->urlGenerator->generate('home.index'));
+        return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
     }
 
     public function getLoginUrl(Request $request): string
