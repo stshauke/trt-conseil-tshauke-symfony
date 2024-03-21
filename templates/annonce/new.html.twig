@@ -1,48 +1,38 @@
-
 {% extends 'base.html.twig' %}
- 
+
 {% block title %}Annonce{% endblock %}
- 
+
 {% block body %}
     <div class="container">
         <h2 class="text-center mt-5 mb-5"></h2>
         <div class="card">
             <div class="card-header">
                 <div class="text-center">
-               
-                   <h3 class="text-primary"> Ajout d'une nouvelle annonce:</h3>
+                    <h3 class="text-primary"> Ajout d'une nouvelle annonce:</h3>
                 </div>
             </div>
             <div class="card-body">
-
                 {{ form_start(form) }}
-                    {{ form_widget(form) }}
-                 {# <button class="btn">{{ button_label|default('Save') }}</button>    #}
-            
-            </div>
-             <div class="card-footer">
-              <div class="text-center">
-                    <a href="{{ path('app_annonce_index') }}" class="btn btn-outline-secondary me-2">Retour à la liste</a>
-                   <button class="btn btn-outline-success me-2">{{ button_label|default('Enregistrer') }}</button>
-                {{ form_end(form) }}
+                <div class="row">
+                    {% for field in form %}
+                        {% if field.vars.name != '_token' %}
+                            <div class="col-md-3 mb-3 label-column">
+                                {{ form_label(field) }}
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                {{ form_widget(field) }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-             </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-center">
+                    <a href="{{ path('app_annonce_index') }}" class="btn btn-outline-secondary me-2">Retour à la liste</a>
+                    <button class="btn btn-outline-success me-2">{{ button_label|default('Enregistrer') }}</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
         </div>
     </div>
 {% endblock %}
-
-
-
-{# ------------------------------
-{% extends 'base.html.twig' %}
-
-{% block title %}New Annonce{% endblock %}
-
-{% block body %}
-    <h1>Créer une nouvelle annonce</h1>
-
-    {{ include('annonce/_form.html.twig') }}
-
-    <a href="{{ path('app_annonce_index') }}">back to list</a>
-{% endblock %}
------------------------- #}

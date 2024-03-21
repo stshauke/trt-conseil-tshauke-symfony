@@ -8,13 +8,21 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AnnonceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('descriptionAnnonce')
+            ->add('descriptionAnnonce', TextareaType::class, [
+                'attr' => [
+                    'class' => 'tinymce',
+                    'maxlength' => '255',
+                    'style' => 'width: 100%;'
+                ],
+                'required' => false, // Optionnel : Si le champ n'est pas obligatoire
+            ])
             ->add('lieuTravail')
             ->add('dateAnnonce')
             ->add('status')
