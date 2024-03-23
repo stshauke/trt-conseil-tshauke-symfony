@@ -22,14 +22,6 @@ class UtilisateurType extends AbstractType
         ->add('email', TextType::class, [
             'label' => 'Email'
         ])
-            ->add('agreeTerms', CheckboxType::class, [
-                                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter nos conditions.',
-                    ]),
-                ],
-            ])
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Mot de passe',
                                 // instead of being set onto the object directly,
@@ -60,6 +52,10 @@ class UtilisateurType extends AbstractType
                 'multiple' =>true, // Permettre à l'utilisateur de sélectionner plusieurs rôles
                 'expanded' =>true, // Afficher les choix comme des cases à cocher
                 'data' => ['ROLE_CONSULTANT'], //Définir la valeur par défaut
+            ])
+            ->add('agree_terms', CheckboxType::class, [
+                'mapped' => false, // Cela indique que ce champ ne sera pas mappé à une propriété de l'objet de formulaire
+               'label'=>'Accepter nos conditions',
             ]);
     }
     public function configureOptions(OptionsResolver $resolver): void

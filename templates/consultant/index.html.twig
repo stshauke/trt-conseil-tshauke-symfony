@@ -59,7 +59,7 @@
                             <a class="btn btn-outline-info" href="{{ path('app_consultant_show', {'id': utilisateur.id}) }}">
                                 <i class="fas fa-eye"></i> <!-- Icône pour afficher -->
                             </a>
-                            <a class="btn btn-outline-success" href="{{ path('app_annonce_edit', {'id': utilisateur.id}) }}">
+                            <a class="btn btn-outline-success" href="{{ path('app_consultant_edit', {'id': utilisateur.id}) }}">
                                 <i class="fas fa-edit"></i> <!-- Icône pour éditer -->
                             </a>
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">

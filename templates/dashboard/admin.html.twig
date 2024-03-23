@@ -1,1 +1,18 @@
-<h1>AAAAAA</h1>
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil
+{% endblock %}
+
+{% block body %}
+{% include "_partials/_nav.html.twig" %}
+     {% include "_partials/_carousel.html.twig" %}
+
+   {% block content %}
+        {# Inclure votre template d'index avec la variable pagination #}
+        {% include "consultant/index.html.twig" with {'pagination': pagination} %}
+    {% endblock %}
+
+
+ {% include "_partials/_footer.html.twig" %}   
+
+{% endblock %}
