@@ -52,7 +52,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Annonce::class, mappedBy: 'Utilisateur', orphanRemoval: true)]
     private Collection $annonces;
 
-    #[ORM\OneToMany(targetEntity: ProfilRecruteur::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: ProfilRecruteur::class, mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
     private Collection $profilRecruteurs;
 
     #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'Utilisateur')]

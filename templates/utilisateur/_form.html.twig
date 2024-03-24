@@ -1,0 +1,24 @@
+{{ form_start(form) }}
+{{ form_errors(form) }}
+
+
+<h3>Informations Utilisateur</h3>
+{{ form_row(form.email) }}
+{{ form_row(form.plainPassword) }}
+{{ form_row(form.nom) }}
+{{ form_row(form.prenom) }}
+{{ form_row(form.status) }}
+{{ form_row(form.roles) }}
+
+<h3>Informations Profil Recruteur</h3>
+<div class="mb-3">
+	<label>Nom entreprise</label>
+	<input type="text" name="nomEntreprise" value=""></div>
+<div class="mb-3">
+	<label>Address Entreprise</label>
+	<input type="text" name="addressEntreprise" value="">
+</div>
+
+
+<button type="submit" class="btn btn-primary">Enregistrer</button>
+{{ form_end(form) }}

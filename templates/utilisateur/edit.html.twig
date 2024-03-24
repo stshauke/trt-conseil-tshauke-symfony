@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Utilisateur
+{% endblock %}
+
+{% block body %}
+	<h1>Edit Utilisateur</h1>
+	{{ form_start(form) }}
+	{{ form_errors(form) }}
+
+
+	<h3>Informations Utilisateur</h3>
+	{{ form_row(form.email) }}
+	{{ form_row(form.password) }}
+	{{ form_row(form.nom) }}
+	{{ form_row(form.prenom) }}
+	{{ form_row(form.status) }}
+	{{ form_row(form.roles) }}
+
+	<h3>Informations Profil Recruteur</h3>
+	<div class="mb-3">
+		<label>Nom entreprise</label>
+		<input type="text" name="nomEntreprise" value="{{profilRecruteur.nomEntreprise}}"></div>
+	<div class="mb-3">
+		<label>Address Entreprise</label>
+		<input type="text" name="addressEntreprise" value="{{profilRecruteur.adresseEntreprise}}">
+	</div>
+
+
+	<button type="submit" class="btn btn-primary">Enregistrer</button>
+	{{ form_end(form) }}
+
+
+	<a href="{{ path('app_utilisateur_index') }}">back to list</a>
+
+	{{ include('utilisateur/_delete_form.html.twig') }}
+{% endblock %}

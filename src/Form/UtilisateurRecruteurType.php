@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class UtilisateurType extends AbstractType
+class UtilisateurRecruteurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -46,7 +46,6 @@ class UtilisateurType extends AbstractType
             ->add('status')
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'Consultant' => 'ROLE_CONSULTANT',
                     'Recruteur' => 'ROLE_RECRUTEUR',
                     // Ajoutez d'autres rôles si nécessaire
                 ],

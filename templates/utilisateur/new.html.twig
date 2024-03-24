@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h2 class="text-center mt-5 mb-5"></h2>
+
+		<div class="card">
+			{{ form_start(form) }}
+			<div class="card-header">
+				<div class="text-center">
+					<h3 class="text-primary">
+						Ajout d'un nouveau utilisateur:</h3>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					{% for field in form %}
+						{% if field.vars.name != '_token' %}
+							<div class="col-md-3 mb-3 label-column">
+								{{ form_label(field) }}
+							</div>
+							<div class="col-md-9 mb-3">
+								{{ form_widget(field) }}
+								<span class="text-danger">{{ form_errors(field) }}</span>
+								{# Afficher les erreurs spécifiques à ce champ #}
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class="row">
+					<div class="col-md-3 mb-3 label-column">
+						<label>Nom entreprise</label>
+						<input type="text" name="nomEntreprise" value="">
+					</div>
+					<div class="col-md-9 mb-3">
+						<label>Address Entreprise</label>
+						<input type="text" name="addressEntreprise" value="">
+					</div>
+				</div>
+			</div>                
+            <div class="card-footer">
+                <div class="text-center">
+                    <a href="{{ path('app_utilisateur_index') }}" class="btn btn-outline-secondary me-2">Retour à la liste</a>
+                    <button class="btn btn-outline-success me-2">Enregistrer'</button>
+                </div>
+            </div>
+        </div>
+	    {{ form_end(form) }}
+    </div>
+{% endblock %}
