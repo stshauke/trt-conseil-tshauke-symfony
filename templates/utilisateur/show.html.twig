@@ -3,7 +3,16 @@
 {% block title %}Utilisateur{% endblock %}
 
 {% block body %}
-    <h1>Utilisateur</h1>
+ <div class="container">
+        <h2 class="text-center mt-5 mb-3">Afficher liste des recruteurs</h2>
+        <div class="card">
+            <div class="card-header">
+                <div class="text-center">
+               
+                   <h3 class="text-primary"> Affichage des informations du recruteur numéro: <b> {{ utilisateur.id}}</b></h3>
+                </div>
+            </div>
+            <div class="card-body">
 
     <table class="table">
         <tbody>
@@ -49,10 +58,14 @@
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('app_utilisateur_index') }}">back to list</a>
-
-    <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}">edit</a>
-
-    {{ include('utilisateur/_delete_form.html.twig') }}
+ <div class="card-footer">
+              <div class="text-center">
+                    <a href="{{ path('app_utilisateur_index') }}" class="btn btn-secondary me-2">Retour à la liste</a>
+                    <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}" class="btn btn-primary">Edit</a>
+                </div>
+             </div>
+</div>
+             </div>   
+                   
+                
 {% endblock %}

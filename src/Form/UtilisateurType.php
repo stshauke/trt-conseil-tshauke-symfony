@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class UtilisateurType extends AbstractType
 {
@@ -43,13 +44,14 @@ class UtilisateurType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('dateCreation')
-            ->add('status')
+            
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Consultant' => 'ROLE_CONSULTANT',
                     'Recruteur' => 'ROLE_RECRUTEUR',
                     // Ajoutez d'autres rôles si nécessaire
                 ],
+                'mapped' => false,
                 'multiple' =>true, // Permettre à l'utilisateur de sélectionner plusieurs rôles
                 'expanded' =>true, // Afficher les choix comme des cases à cocher
                 'data' => ['ROLE_RECRUTEUR'], //Définir la valeur par défaut
@@ -57,6 +59,9 @@ class UtilisateurType extends AbstractType
             ->add('agree_terms', CheckboxType::class, [
                 'mapped' => false, // Cela indique que ce champ ne sera pas mappé à une propriété de l'objet de formulaire
                'label'=>'Accepter nos conditions',
+            ])
+            ->add('status',HiddenType::class, [
+                'mapped' => false, // Cela indique que ce champ ne sera pas mappé à une propriété de l'objet de formulaire
             ]);
     }
     public function configureOptions(OptionsResolver $resolver): void
