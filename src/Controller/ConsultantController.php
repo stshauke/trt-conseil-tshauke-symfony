@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 #[Route('/consultant')]
@@ -20,6 +21,10 @@ class ConsultantController extends AbstractController
     #[Route('/', name: 'app_consultant_index', methods: ['GET'])]
     public function index(Request $request,UtilisateurRepository $utilisateurRepository, PaginatorInterface $paginator): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $accessDeniedRoute = $this->generateUrl('app_access_denied'); // Remplacez 'access_denied' par le nom de votre route d'accès refusé
+            return new RedirectResponse($accessDeniedRoute);
+        }
         // Récupérer le terme de recherche depuis la requête
         $searchTerm = $request->query->get('search');
 
@@ -29,9 +34,17 @@ class ConsultantController extends AbstractController
         // Nombre d'éléments par page
         $itemsPerPage = 6;
     // Créez une requête Doctrine pour récupérer les annonces (alias: an)
+        // $queryBuilder = $utilisateurRepository->createQueryBuilder('u')
+        // ->orderBy('u.id', 'ASC');
+    // Créez une requête Doctrine pour récupérer les utilisateurs (alias: u)
         $queryBuilder = $utilisateurRepository->createQueryBuilder('u')
-        ->orderBy('u.id', 'ASC');
-        
+        ->where('u.roles LIKE :role')
+        ->orderBy('u.id', 'ASC')
+        ->setParameter('role', '%"ROLE_CONSULTANT"%');    
+
+
+
+
         // Ajoutez une condition de recherche si un terme de recherche est spécifié
         if ($searchTerm) {
             $queryBuilder

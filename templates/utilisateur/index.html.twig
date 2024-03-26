@@ -8,13 +8,17 @@
         <div class="card">
             <div class="card-header">
                         <div class="row justify-content-between">
-                                           <h3 class="text-primary text-center"> Liste des Recruteurs</h3>
+                                          
 
                             <div class="col-sm-auto">
-                                <a class="btn btn-outline-primary" href="{{ path('app_utilisateur_new') }}">
-                                    <i class="fas fa-plus"></i> <!-- Icône pour créer un nouveau module -->
-                                </a>
-                            </div>
+                                           {% if app.user %}
+                                                {% if 'ROLE_CONSULTANT' not in app.user.roles %}
+                                                    {# <a class="btn btn-outline-primary" href="{{ path('app_utilisateur_new') }}">
+                                                        <i class="fas fa-plus"></i> <!-- Icône pour créer un nouveau module -->
+                                                    </a> #}
+                                                {% endif %}
+                                            {% endif %}
+                                                                        </div>
                             <div class="col-sm-auto">
                                 <form class="d-flex" role="search" id="searchForm">
                                     <div class="form-group">

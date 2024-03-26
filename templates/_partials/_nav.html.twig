@@ -8,14 +8,54 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="index.html" class="nav-item nav-link active">Accueil</a>
-                    <a class="nav-item nav-link" href="{{ path('app_login') }}">Administrateur</a>
-                    <a class="nav-item nav-link"href="{{ path('app_login') }}">Consultant</a>
+                           <a href="{{ path('home.index') }}" class="nav-item nav-link 
+                           {% if app.request.attributes.get('_route') == 'home.index'%}active{% endif %}">Accueil</a>
+                        {# Début de  gestion de l'Admin #}
+                            {% if app.user %}
+                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                    <a href="{{ path('app_consultant_index') }}" class="nav-item nav-link 
+                                            {% if (app.request.attributes.get('_route') == 'app_consultant_index' 
+                                            or app.request.attributes.get('_route') == 'app_consultant_edit'
+                                            or app.request.attributes.get('_route') == 'app_consultant_show'
+                                            ) 
+                                            %}
+                                        active
+                                    {% endif %}">Administrateur</a>
+                                {% else %}
+                                    <a class="nav-item nav-link" href="{{ path('app_login') }}">Administrateur</a>
+                                {% endif %}
+                            {% else %}
+                                <a class="nav-item nav-link" href="{{ path('app_login') }}">Administrateur</a>
+                            {% endif %}
+                        {# Fin de  la gestion de l'Admin #}
+                        {# Début de  gestion des droits du Consultant #}
+                            {% if app.user %}
+                                {% if 'ROLE_CONSULTANT' in app.user.roles %}
+                                    <a href="{{ path('app_utilisateur_index') }}" class="nav-item nav-link 
+                                            {% if (app.request.attributes.get('_route') == 'app_utilisateur_index' 
+                                            or app.request.attributes.get('_route') == 'app_utilisateur_edit'
+                                            or app.request.attributes.get('_route') == 'app_utilisateur_show'
+                                            ) 
+                                            %}
+                                        active
+                                    {% endif %}">Consultant</a>
+                                {% else %}
+                                    <a class="nav-item nav-link" href="{{ path('app_login') }}">Consultant</a>
+                                {% endif %}
+                            {% else %}
+                                <a class="nav-item nav-link" href="{{ path('app_login') }}">Consultant</a>
+                            {% endif %}
+                        {# Fin de  gestion des droits du Consultant #}
                     <a  class="nav-item nav-link"href="{{ path('app_login') }}">Recruteur</a>
                     <a  class="nav-item nav-link"href="{{ path('app_login') }}">Candidat</a>
                     
                     <a href="contact.html" class="nav-item nav-link mr-4">Contact</a>
-                                        <a class="nav-item nav-link mr-4" style="margin-right:50px">      </a>
+                    <a class="nav-item nav-link mr-4" style="margin-right:50px">      </a>
+                   {% if app.user %}
+                        {% if 'ROLE_CONSULTANT' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+                            <a href="{{ path('app_logout') }}" class="nav-item nav-link mr-4 text-danger" style="margin-right:50px">Déconnexion</a>
+                        {% endif %}
+                    {% endif %}
 
                 </div>
             </div>

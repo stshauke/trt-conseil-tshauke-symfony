@@ -58,15 +58,17 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     {
         $user = $token->getUser();
         
-        // if ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-        //                return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
-        // } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CONSULTANT')) {
-        //     return new RedirectResponse($this->urlGenerator->generate('app_consultant'));
-        // } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CANDIDAT')) {
-        //     return new RedirectResponse($this->urlGenerator->generate('app_candidat'));
-        // } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ENTREPRENEUR')) {
-        //     return new RedirectResponse($this->urlGenerator->generate('app_recruteur'));
-        // }
+            if ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+                return new RedirectResponse($this->urlGenerator->generate('app_consultant_index'));
+            } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CONSULTANT')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_utilisateur_index'));// C'est la page recruteur
+            } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CANDIDAT')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_candidat'));
+            } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ENTREPRENEUR')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_recruteur'));
+            }
+
+return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
         
         return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
     }
