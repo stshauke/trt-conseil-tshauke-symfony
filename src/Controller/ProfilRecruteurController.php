@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/profil/recruteur')]
 class ProfilRecruteurController extends AbstractController
@@ -83,5 +84,24 @@ class ProfilRecruteurController extends AbstractController
         }
 
         return $this->redirectToRoute('app_profil_recruteur_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/update-status/{id}', name: 'update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Récupérer les données JSON envoyées depuis le frontend
+        $data = json_decode($request->getContent(), true);
+
+        // Vérifier si la clé "status" est présente et si elle est à true ou false
+        if (isset($data['status']) && is_bool($data['status'])) {
+            // Mettre à jour le statut de l'utilisateur
+            $utilisateur->setStatus($data['status']);
+            $entityManager->flush();
+
+            // Dans votre méthode updateStatus
+            return new JsonResponse(['message' => 'Statut mis à jour avec succès'], 200);
+        }
+
+        // Retourner une réponse JSON indiquant qu'il y a eu une erreur dans les données envoyées
+        return new JsonResponse(['message' => 'Données de statut invalides'], 200);
     }
 }

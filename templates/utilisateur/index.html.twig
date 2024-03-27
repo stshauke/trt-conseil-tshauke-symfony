@@ -1,8 +1,15 @@
+
 {% extends 'base.html.twig' %}
  
 {% block title %}utilisateur index{% endblock %}
  
 {% block body %}
+    <style>
+.checkbox-lg {
+  width: 25px;
+  height: 25px;
+}
+</style>
     <div class="container-fluid">
         <h2 class="text-center mt-5 mb-3">Liste des Recruteurs</h2>
         <div class="card">
@@ -57,17 +64,20 @@
                 <td>{{ profilRecruteur.utilisateur.nom }}</td>
                 <td>{{ profilRecruteur.utilisateur.prenom }}</td>
                 <td>{{ profilRecruteur.utilisateur.dateCreation ? profilRecruteur.utilisateur.dateCreation|date('Y-m-d') : '' }}</td>
-                <td>{{ profilRecruteur.utilisateur.status ? 'Yes' : 'No' }}</td>
+                <td class="text-center">
+                    <input type="checkbox" {% if profilRecruteur.utilisateur.status %}checked{% endif %} 
+                    class="form-check-input checkbox-lg" data-user-id="{{ profilRecruteur.utilisateur.id }}">
+                </td>
                 <td>{{profilRecruteur.nomEntreprise}}</td>
                 <td>{{profilRecruteur.adresseEntreprise}}</td>
-                <td width="160px">
+                <td width="110px" class="text-center">
                     <form method="post" action="{{ path('app_utilisateur_delete', {'id': profilRecruteur.utilisateur.id}) }}" onsubmit="return confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?');">
                             <a class="btn btn-outline-info" href="{{ path('app_utilisateur_show', {'id': profilRecruteur.utilisateur.id}) }}">
                                 <i class="fas fa-eye"></i> <!-- Icône pour afficher -->
                             </a>
-                            <a class="btn btn-outline-success" href="{{ path('app_utilisateur_edit', {'id': profilRecruteur.utilisateur.id}) }}">
+                            {# <a class="btn btn-outline-success" href="{{ path('app_utilisateur_edit', {'id': profilRecruteur.utilisateur.id}) }}">
                                 <i class="fas fa-edit"></i> <!-- Icône pour éditer -->
-                            </a>
+                            </a> #}
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ profilRecruteur.utilisateur.id) }}">
                             <button class="btn btn-outline-danger" type="submit">
                                 <i class="fas fa-trash-alt"></i> <!-- Icône pour supprimer -->
@@ -90,7 +100,30 @@
             </div>
         </div>
     </div>
- 
+ {% block javascripts %}
+    <script>
+        document.querySelectorAll('.checkbox-lg').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var userId = this.getAttribute('data-user-id');
+                var isChecked = this.checked;
+
+                // Envoi de la requête AJAX
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '{{ path('update_status', {'id': ':id'}) }}'.replace(':id', userId), true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        console.log('Statut mis à jour avec succès');
+                    } else {
+                        console.error('Erreur lors de la mise à jour du statut');
+                    }
+                };
+                xhr.send(JSON.stringify({ status: isChecked }));
+            });
+        });
+    </script>
+{% endblock %}
+
 {% endblock %}
 
 
