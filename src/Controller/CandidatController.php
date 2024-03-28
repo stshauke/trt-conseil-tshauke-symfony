@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Utilisateur;
-use App\Form\UtilisateurType;
+use App\Form\Utilisateur1Type;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,12 +13,10 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
-
-#[Route('/consultant')]
-class ConsultantController extends AbstractController
+#[Route('/candidat')]
+class CandidatController extends AbstractController
 {
-    #[Route('/', name: 'app_consultant_index', methods: ['GET'])]
+    #[Route('/', name: 'app_candidat_index', methods: ['GET'])]
     public function index(Request $request,UtilisateurRepository $utilisateurRepository, PaginatorInterface $paginator): Response
     {
         if (!$this->isGranted('ROLE_CONSULTANT')) {
@@ -40,7 +38,7 @@ class ConsultantController extends AbstractController
         $queryBuilder = $utilisateurRepository->createQueryBuilder('u')
         ->where('u.roles LIKE :role')
         ->orderBy('u.id', 'ASC')
-        ->setParameter('role', '%"ROLE_CONSULTANT"%');    
+        ->setParameter('role', '%"ROLE_CANDIDAT"%');    
 
 
 
@@ -65,66 +63,58 @@ class ConsultantController extends AbstractController
         
         
         
-        return $this->render('consultant/index.html.twig', [
+        return $this->render('candidat/index.html.twig', [
             'pagination' => $pagination,
         ]);
     }
 
-    #[Route('/new', name: 'app_consultant_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher,  EntityManagerInterface $entityManager): Response
+    #[Route('/new', name: 'app_candidat_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $utilisateur = new Utilisateur();
-        $form = $this->createForm(UtilisateurType::class, $utilisateur);
+        $form = $this->createForm(Utilisateur1Type::class, $utilisateur);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-             // encode the plain password
-             $utilisateur ->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $utilisateur ,
-                    $form->get('plainPassword')->getData()
-                )
-            );
             $entityManager->persist($utilisateur);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_consultant_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_candidat_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('consultant/new.html.twig', [
+        return $this->render('candidat/new.html.twig', [
             'utilisateur' => $utilisateur,
             'form' => $form,
-            'button_label' => 'Enregistrer',
         ]);
     }
 
-    #[Route('/{id}', name: 'app_consultant_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_candidat_show', methods: ['GET'])]
     public function show(Utilisateur $utilisateur): Response
     {
-        return $this->render('consultant/show.html.twig', [
+        return $this->render('candidat/show.html.twig', [
             'utilisateur' => $utilisateur,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_consultant_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_candidat_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UtilisateurType::class, $utilisateur);
+        $form = $this->createForm(Utilisateur1Type::class, $utilisateur);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_consultant_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_candidat_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('consultant/edit.html.twig', [
+        return $this->render('candidat/edit.html.twig', [
             'utilisateur' => $utilisateur,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_consultant_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_candidat_delete', methods: ['POST'])]
     public function delete(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$utilisateur->getId(), $request->request->get('_token'))) {
@@ -132,6 +122,6 @@ class ConsultantController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_consultant_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_candidat_index', [], Response::HTTP_SEE_OTHER);
     }
 }

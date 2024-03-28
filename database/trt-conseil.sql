@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 19 mars 2024 à 07:04
+-- Généré le : jeu. 28 mars 2024 à 17:25
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -37,15 +37,21 @@ CREATE TABLE IF NOT EXISTS `annonce` (
   `utilisateur_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_F65593E5FB88E14F` (`utilisateur_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `annonce`
 --
 
 INSERT INTO `annonce` (`id`, `description_annonce`, `lieu_travail`, `date_annonce`, `status`, `utilisateur_id`) VALUES
-(1, 'Annonce test', 'Nabeul', '2024-03-17', 0, 2),
-(2, 'Annonce test2', 'Nabeul2', '2024-03-28', 0, 3);
+(1, 'Restaurant Gastronomique renommé recherche un Chef Cuisinier passionné pour rejoindre notre équipe dynamique. Si vous êtes créatif, talentueux et avez une véritable passion pour la gastronomie, nous avons l\\\'opportunité parfaite pour vous.', 'Nabeul', '2024-03-17', 0, 2),
+(2, 'Annonce test2', 'Nabeul2', '2024-03-28', 0, 3),
+(4, 'Annonce test BBBBBB', 'France', '2024-03-22', 1, 2),
+(5, 'Annonce test AAAA', 'Paris', '2024-03-07', 1, 3),
+(6, 'Annonce test AAAA', 'Paris', '2024-03-19', 0, 2),
+(7, 'Annonce test AAAA', 'Paris', '2024-03-28', 0, 2),
+(8, 'Annonce test 2', 'Lille', '2024-03-03', 1, 3),
+(9, 'Annonce test23', 'Lille', '2024-03-01', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -56,11 +62,20 @@ INSERT INTO `annonce` (`id`, `description_annonce`, `lieu_travail`, `date_annonc
 DROP TABLE IF EXISTS `candidature`;
 CREATE TABLE IF NOT EXISTS `candidature` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `profil_candidat_id` int NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `approuver` tinyint(1) NOT NULL,
+  `date_approbation` date DEFAULT NULL,
+  `utilisateur_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_E33BD3B852EEF2C2` (`profil_candidat_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `IDX_E33BD3B8FB88E14F` (`utilisateur_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `candidature`
+--
+
+INSERT INTO `candidature` (`id`, `approuver`, `date_approbation`, `utilisateur_id`) VALUES
+(1, 0, '2024-03-03', 2),
+(2, 1, '2024-03-23', 4);
 
 -- --------------------------------------------------------
 
@@ -81,10 +96,10 @@ CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
 --
 
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20240316170738', '2024-03-16 17:07:58', 772),
-('DoctrineMigrations\\Version20240316171255', '2024-03-16 17:13:06', 3720),
-('DoctrineMigrations\\Version20240317140119', '2024-03-17 14:01:39', 2707),
-('DoctrineMigrations\\Version20240318155646', '2024-03-18 15:57:05', 4271);
+('DoctrineMigrations\\Version20240319170938', '2024-03-20 14:57:00', 3022),
+('DoctrineMigrations\\Version20240320145253', '2024-03-20 14:57:03', 303),
+('DoctrineMigrations\\Version20240320150848', '2024-03-20 15:09:03', 303),
+('DoctrineMigrations\\Version20240320152114', '2024-03-20 15:21:28', 2891);
 
 -- --------------------------------------------------------
 
@@ -117,34 +132,26 @@ INSERT INTO `messenger_messages` (`id`, `body`, `headers`, `queue_name`, `create
 -- --------------------------------------------------------
 
 --
--- Structure de la table `profil_candidat`
---
-
-DROP TABLE IF EXISTS `profil_candidat`;
-CREATE TABLE IF NOT EXISTS `profil_candidat` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `prenom` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cv` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `poste` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `profil_recruteur`
 --
 
 DROP TABLE IF EXISTS `profil_recruteur`;
 CREATE TABLE IF NOT EXISTS `profil_recruteur` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `utilisateur_id` int DEFAULT NULL,
   `nom_entreprise` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `adresse_entreprise` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `utilisateur_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_83A851ACFB88E14F` (`utilisateur_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `profil_recruteur`
+--
+
+INSERT INTO `profil_recruteur` (`id`, `utilisateur_id`, `nom_entreprise`, `adresse_entreprise`) VALUES
+(1, 8, 'Magname Camara 444', '2 rue l\'Aqueduc'),
+(2, 9, 'Entreprise test1', 'Entreprise test1');
 
 -- --------------------------------------------------------
 
@@ -189,16 +196,19 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_1D1C63B3E7927C74` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
 INSERT INTO `utilisateur` (`id`, `email`, `roles`, `password`, `nom`, `prenom`, `date_creation`, `status`) VALUES
-(2, 'alexandros.ones@gmail.com', '[\"ROLE_ADMIN\"]', '$2y$13$sluKclIY.tvE8i/PKrkFkenJ/nFlb4zrtTS1jmx1XuzY6ljqQpZPy', 'Alexandre', 'Joyce', NULL, 0),
-(3, 'alexandrejoyce@yahoo.com', '[\"ROLE_CONSULTANT\"]', '$2y$13$vPUhwWuaVNW8hk1FpfkjzeB3nPRPRrFwTxfhAsjYddWnf0J4swB0G', 'Scrapy', 'Salomon', NULL, 0),
-(4, 'alexandrejoyce4@yahoo.com', '[\"ROLE_CANDIDAT\"]', '$2y$13$zfxPy.azqy9kLq2FFRGzqeAbBN9ql0bgLgfOXNXa22GG0a4MW61fy', 'Tshauke', 'Alexandros', NULL, 0);
+(2, 'alexandros.ones@gmail.com', '[\"ROLE_ADMIN\"]', '$2y$13$sluKclIY.tvE8i/PKrkFkenJ/nFlb4zrtTS1jmx1XuzY6ljqQpZPy', 'Alexandre', 'Joyce', '2024-03-06', 1),
+(3, 'alexandrejoyce@yahoo.com', '[\"ROLE_CONSULTANT\"]', '$2y$13$vPUhwWuaVNW8hk1FpfkjzeB3nPRPRrFwTxfhAsjYddWnf0J4swB0G', 'Scrapy', 'Salomon', '2024-03-06', 0),
+(4, 'alexandrejoyce4@yahoo.com', '[\"ROLE_CANDIDAT\"]', '$2y$13$zfxPy.azqy9kLq2FFRGzqeAbBN9ql0bgLgfOXNXa22GG0a4MW61fy', 'Tshauke', 'Alexandros', '2024-03-07', 1),
+(7, 'camaramagname65@gmail.com', '[\"ROLE_CONSULTANT\"]', '$2y$13$eG7hdgWexAWmVE1sKvXvsO/m4iIYRS88bQevL31ovc5hYab22YjeS', 'Camara', 'Magname', '2024-03-21', 1),
+(8, 'camaramagname66@gmail.com', '[\"ROLE_RECRUTEUR\"]', '$2y$13$It3yQZilepbkzRtvKKrKZe51d7i9ls7DvM.gagdu.TjMc8HTdeK0O', 'Camara', 'Magname', '2024-03-24', 0),
+(9, 'camaramagname67@gmail.com', '[\"ROLE_RECRUTEUR\"]', '$2y$13$H.07fUolIzGmBrOsDMOX7.pE7HKOeP.kBJoBTX/bh36/kGCg.F/XO', 'Camara', 'Magname', '2024-03-25', 1);
 
 --
 -- Contraintes pour les tables déchargées
@@ -214,7 +224,7 @@ ALTER TABLE `annonce`
 -- Contraintes pour la table `candidature`
 --
 ALTER TABLE `candidature`
-  ADD CONSTRAINT `FK_E33BD3B852EEF2C2` FOREIGN KEY (`profil_candidat_id`) REFERENCES `profil_candidat` (`id`);
+  ADD CONSTRAINT `FK_E33BD3B8FB88E14F` FOREIGN KEY (`utilisateur_id`) REFERENCES `utilisateur` (`id`);
 
 --
 -- Contraintes pour la table `profil_recruteur`

@@ -3,26 +3,22 @@
 {% block title %}Annonce index{% endblock %}
  
 {% block body %}
+<style>
+.checkbox-lg {
+  width: 25px;
+  height: 25px;
+}
+</style>
     <div class="container">
         <h2 class="text-center mt-5 mb-3">Liste des annonces</h2>
         <div class="card">
-            {# <div class="card-header">
-                <a class="btn btn-outline-primary" href="{{ path('app_annonce_new') }}">
-                            <i class="fas fa-plus"></i> <!-- Icône pour créer un nouveau module -->
-                        </a>
-                        <div class="text-center">
-               
-                   <h3 class="text-primary"> Liste des annonces</h3>
-                </div>
-            </div> #}
+            
             <div class="card-header">
                         <div class="row justify-content-between">
-                                           <h3 class="text-primary text-center"> Liste des annonces</h3>
+                                         
 
                             <div class="col-sm-auto">
-                                <a class="btn btn-outline-primary" href="{{ path('app_annonce_new') }}">
-                                    <i class="fas fa-plus"></i> <!-- Icône pour créer un nouveau module -->
-                                </a>
+                                
                             </div>
                             <div class="col-sm-auto">
                                 <form class="d-flex" role="search" id="searchForm">
@@ -55,15 +51,16 @@
                         <td>{{ annonce.descriptionAnnonce }}</td>
                         <td>{{ annonce.lieuTravail }}</td>
                         <td>{{ annonce.dateAnnonce ? annonce.dateAnnonce|date('Y-m-d') : '' }}</td>
-                        <td>{{ annonce.status ? 'Yes' : 'No' }}</td>
-                        <td>
+                        <td class="text-center">
+                    <input type="checkbox" {% if annonce.status %}checked{% endif %} 
+                    class="form-check-input checkbox-lg" data-user-id="{{ annonce.id }}">
+                </td>
+                       <td width="60px" class="text-center">
                             <form method="post" action="{{ path('app_annonce_delete', {'id': annonce.id}) }}" onsubmit="return confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?');">
                                 <a class="btn btn-outline-info" href="{{ path('app_annonce_show', {'id': annonce.id}) }}">
                                     <i class="fas fa-eye"></i> <!-- Icône pour afficher -->
                                 </a>
-                                <a class="btn btn-outline-success" href="{{ path('app_annonce_edit', {'id': annonce.id}) }}">
-                                    <i class="fas fa-edit"></i> <!-- Icône pour éditer -->
-                                </a>
+                                
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ annonce.id) }}">
                                 <button class="btn btn-outline-danger" type="submit">
                                     <i class="fas fa-trash-alt"></i> <!-- Icône pour supprimer -->
