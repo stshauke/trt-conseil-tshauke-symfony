@@ -35,7 +35,11 @@
                                     <a href="#" class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') == 'app_utilisateur_index'
                                     or app.request.attributes.get('_route') == 'app_annonce_index'
                                     or app.request.attributes.get('_route') == 'app_candidat_index'
-                                    or app.request.attributes.get('_route') == 'app_candidature_index'  
+                                    or app.request.attributes.get('_route') == 'app_candidature_index'
+                                     or app.request.attributes.get('_route') starts with 'app_candidature_show'
+                                      or app.request.attributes.get('_route') starts with 'app_utilisateur_show'
+                                      or app.request.attributes.get('_route') starts with 'app_annonce_show'
+                                      or app.request.attributes.get('_route') starts with 'app_candidat_show' 
                                     %}active{% endif %}"" data-bs-toggle="dropdown">Consultant</a>
                                     <div class="dropdown-menu rounded-0 m-0">
                                         {# Début validation Recruteur #}                                       
@@ -88,7 +92,7 @@
                         {% endif %}
                             
                             {# Fin de  gestion des droits du Candidat #}                    
-                    <a href="contact.html" class="nav-item nav-link mr-4">Contact</a>
+                    <a href="{{path('app_contact')}}" class="nav-item nav-link mr-4">Contact</a>
                     <a class="nav-item nav-link mr-4" style="margin-right:50px">      </a>
                    {% if app.user %}
                         {% if 'ROLE_CONSULTANT' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or 'ROLE_CANDIDAT' in app.user.roles  %}

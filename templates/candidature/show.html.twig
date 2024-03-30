@@ -4,12 +4,11 @@
  
 {% block body %}
     <div class="container">
-        <h2 class="text-center mt-5 mb-3">Afficher liste des modules</h2>
+        <h2 class="text-center mt-5 mb-3">Affichage de la candidature numéro:  <span class="text-success">{{ candidature.id }}</span></h2>
         <div class="card">
             <div class="card-header">
                 <div class="text-center">
                
-                   <h3 class="text-primary"> Affichage de l'candidature numéro: <b> {{ candidature.id}}</b></h3>
                 </div>
             </div>
             <div class="card-body">
@@ -24,10 +23,10 @@
 
 <div class="row">
     <div class="col-sm-3">
-        <b >Approbation:</b>
+        <b >Candidat:</b>
     </div>
     <div class="col-sm-9">
-        <p>{{ candidature.approuver ? 'Oui' : 'Non' }}</p>
+        <p>{{ candidature.utilisateur.prenom }} {{ candidature.utilisateur.nom }}</p>
     </div>
 </div>
 
@@ -40,16 +39,44 @@
     </div>
 </div>
 
-
-
-
-            
+<div class="row">
+    <div class="col-sm-3">
+        <b >Description Annonce:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ candidature.annonce.DescriptionAnnonce }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <b >Poste demandée:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ candidature.annonce.PosteDemandee }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <b >Lieu de travail:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ candidature.annonce.LieuTravail }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <b >Recruteur:</b>
+    </div>
+    <div class="col-sm-9">
+        <p>{{ candidature.annonce.utilisateur.prenom }} {{ candidature.annonce.utilisateur.nom }}</p>
+    </div>
+</div>            
 </div>
 
              <div class="card-footer">
               <div class="text-center">
                     <a href="{{ path('app_candidature_index') }}" class="btn btn-secondary me-2">Retour à la liste</a>
-                    <a href="{{ path('app_candidature_edit', {'id': candidature.id}) }}" class="btn btn-primary">Edit</a>
+
                 </div>
              </div>
         </div>

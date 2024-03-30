@@ -38,6 +38,8 @@
                             <th>Candidat</th>
                 <th>Date candidature</th>
                 <th>Description Annonce</th>
+                <th>Poste demandée</th>
+                <th>Lieu Travail</th>
                  <th>Recruteur</th> 
                         <th>Approbation</th>                
                         <th width="110px">Action</th>
@@ -45,10 +47,14 @@
                      {% for candidature  in pagination %}
                     <tr>
                         <td>{{ candidature.id }}</td>
-                        <td>{{ candidature.UtilisateurId }}</td>
+                        <td>{{ candidature.utilisateur.prenom }} {{ candidature.utilisateur.nom }}</td>
                         <td>{{ candidature.dateApprobation ? candidature.dateApprobation|date('Y-m-d') : '' }}</td>
                  <td>{{ candidature.annonce.DescriptionAnnonce }}</td>
-                 <td>{{ candidature.utilisateur.prenom }} {{ candidature.utilisateur.nom }}</td>
+                  <td>{{ candidature.annonce.PosteDemandee }}</td>
+                    <td>{{ candidature.annonce.LieuTravail }}</td>
+
+                 <td>{{ candidature.annonce.utilisateur.prenom }} {{ candidature.annonce.utilisateur.nom }}</td>
+                 
                 <td class="text-center">
                     <input type="checkbox" {% if candidature.approuver %}checked{% endif %} 
                     class="form-check-input checkbox-lg" data-user-id="{{ candidature.id }}">

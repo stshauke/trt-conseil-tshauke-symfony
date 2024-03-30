@@ -16,12 +16,13 @@ class Annonce
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $descriptionAnnonce = null;
-
     #[ORM\Column(length: 255)]
     private ?string $lieuTravail = null;
 
+    
+    
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateAnnonce = null;
 
@@ -32,13 +33,21 @@ class Annonce
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $Utilisateur = null;
 
-    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'Annonce')]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $posteDemandee = null;
+
+    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'annonce', orphanRemoval: true)]
+    private Collection $Annonce;
+
+    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'Candidature')]
     private Collection $candidatures;
 
     public function __construct()
     {
+        $this->Annonce = new ArrayCollection();
         $this->candidatures = new ArrayCollection();
     }
+
 
 
     public function getId(): ?int
@@ -106,6 +115,48 @@ class Annonce
         return $this;
     }
 
+    public function getPosteDemandee(): ?string
+    {
+        return $this->posteDemandee;
+    }
+
+    public function setPosteDemandee(?string $posteDemandee): static
+    {
+        $this->posteDemandee = $posteDemandee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Candidature>
+     */
+    public function getAnnonce(): Collection
+    {
+        return $this->Annonce;
+    }
+
+    public function addAnnonce(Candidature $annonce): static
+    {
+        if (!$this->Annonce->contains($annonce)) {
+            $this->Annonce->add($annonce);
+            $annonce->setAnnonce($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnonce(Candidature $annonce): static
+    {
+        if ($this->Annonce->removeElement($annonce)) {
+            // set the owning side to null (unless already changed)
+            if ($annonce->getAnnonce() === $this) {
+                $annonce->setAnnonce(null);
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Candidature>
      */
@@ -118,23 +169,14 @@ class Annonce
     {
         if (!$this->candidatures->contains($candidature)) {
             $this->candidatures->add($candidature);
-            $candidature->setAnnonce($this);
+           
         }
 
         return $this;
     }
 
-    public function removeCandidature(Candidature $candidature): static
-    {
-        if ($this->candidatures->removeElement($candidature)) {
-            // set the owning side to null (unless already changed)
-            if ($candidature->getAnnonce() === $this) {
-                $candidature->setAnnonce(null);
-            }
-        }
+    
 
-        return $this;
-    }
 
     
 }
