@@ -25,6 +25,10 @@ class Candidature
     #[ORM\ManyToOne(inversedBy: 'candidatures')]
     private ?Utilisateur $Utilisateur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'candidatures')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Annonce $Annonce = null;
+
 
 
 
@@ -65,6 +69,18 @@ class Candidature
     public function setUtilisateur(?Utilisateur $Utilisateur): static
     {
         $this->Utilisateur = $Utilisateur;
+
+        return $this;
+    }
+
+    public function getAnnonce(): ?Annonce
+    {
+        return $this->Annonce;
+    }
+
+    public function setAnnonce(?Annonce $Annonce): static
+    {
+        $this->Annonce = $Annonce;
 
         return $this;
     }

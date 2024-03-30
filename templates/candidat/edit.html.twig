@@ -1,13 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Utilisateur{% endblock %}
+{% block title %}Recruteur{% endblock %}
 
 {% block body %}
-    <h1>Edit Utilisateur</h1>
+    <div class="container">
+         <h2 class="text-center mt-5 mb-1">Modification des informations du candidat numéro: 
+	 <span class="text-success">{{ utilisateur.id }}</span></h2>
+        <div class="card">
+            <div class="card-header">
+                <div class="text-center">
+                    
+                </div>
+            </div>
+            <div class="card-body">                
+               
+                
 
-    {{ include('candidat/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_candidat_index') }}">back to list</a>
-
-    {{ include('candidat/_delete_form.html.twig') }}
+{% for field in form %}
+    {% if field.vars.name != '_token' and field.vars.name != 'status' and field.vars.name != 'roles' %}
+        <div class="row">
+            <div class="col-md-3 mb-3 label-column">
+                {{ form_label(field) }}
+            </div>
+            <div class="col-md-9 mb-3">
+                {% if field.vars.block_prefixes[1] == 'text' %}
+                    {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                {% else %}
+                    {{ form_widget(field) }}
+                {% endif %}
+                {% set errors = form_errors(field) %}
+                {% if errors %}
+                    <span class="text-danger">
+                        {% if errors|length > 1 %}
+                            {% for error in errors %}
+                                {{ error }}<br>
+                            {% endfor %}
+                        {% else %}
+                            {{ errors }}
+                        {% endif %}
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+<div class="card-footer">
+                <div class="text-center">
+                    <a href="{{ path('app_utilisateur_index') }}" class="btn btn-outline-secondary me-2">Retour à la liste</a>
+                    <button class="btn btn-outline-success me-2">Enregistrer</button>
+                </div>
+			
+            </div>
+            </div>
+           
+        </div>
+    </div>
 {% endblock %}

@@ -28,51 +28,70 @@
                                 <a class="nav-item nav-link" href="{{ path('app_login') }}">Administrateur</a>
                             {% endif %}
                         {# Fin de  la gestion de l'Admin #}
-
-
-
-
-                        {# Début de  gestion des droits du Consultant #}
-                        
-                            {% if app.user %}
-                             {% if 'ROLE_CONSULTANT' in app.user.roles %}
-                              <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') == 'app_utilisateur_index'
-                        or app.request.attributes.get('_route') == 'app_annonce_index'
-                        or app.request.attributes.get('_route') == 'app_candidat_index'
-                        or app.request.attributes.get('_route') == 'app_candidature_index'  
-                        %}active{% endif %}"" data-bs-toggle="dropdown">Consultant</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                                    {# Début validation Recruteur #}                                       
-                                            <a href="{{ path('app_utilisateur_index') }}" class="dropdown-item">Approuver l'inscription Recruteur</a>                 
-                                    {# Fin validation Recruteur #}
-                                    {# Début validation Annonce #}     
-                                            <a href="{{ path('app_annonce_index') }}" class="dropdown-item">Valider Annonce</a>
-                                    {# Fin validation Annonce#}
-                                            <a href="{{ path('app_candidat_index') }}" class="dropdown-item">Approuver l'inscription Candidat</a>
-                                            <a href="{{ path('app_candidature_index') }}" class="dropdown-item">Valider Candidature</a>
-                                        </div>
+                        {# Début de  gestion des droits du Consultant #}                        
+                        {% if app.user %}
+                            {% if 'ROLE_CONSULTANT' in app.user.roles %}
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') == 'app_utilisateur_index'
+                                    or app.request.attributes.get('_route') == 'app_annonce_index'
+                                    or app.request.attributes.get('_route') == 'app_candidat_index'
+                                    or app.request.attributes.get('_route') == 'app_candidature_index'  
+                                    %}active{% endif %}"" data-bs-toggle="dropdown">Consultant</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                        {# Début validation Recruteur #}                                       
+                                        <a href="{{ path('app_utilisateur_index') }}" class="dropdown-item">Approuver l'inscription Recruteur</a>                 
+                                        {# Fin validation Recruteur #}
+                                        {# Début validation Annonce #}     
+                                        <a href="{{ path('app_annonce_index') }}" class="dropdown-item">Valider Annonce</a>
+                                        {# Fin validation Annonce#}
+                                        <a href="{{ path('app_candidat_index') }}" class="dropdown-item">Approuver l'inscription Candidat</a>
+                                        <a href="{{ path('app_candidature_index') }}" class="dropdown-item">Valider Candidature</a>
+                                    </div>
                                 </div>
-                                {% else %}
-                                <a class="nav-item nav-link" href="{{ path('app_login') }}">Consultant</a>
-                            {% endif %}
                             {% else %}
                                 <a class="nav-item nav-link" href="{{ path('app_login') }}">Consultant</a>
                             {% endif %}
-                        
-                        {# Fin de  gestion des droits du Consultant #}
+                        {% else %}
+                            <a class="nav-item nav-link" href="{{ path('app_login') }}">Consultant</a>
+                        {% endif %}
+                            
+                            {# Fin de  gestion des droits du Consultant #}
 
 
 
 
 
                     <a  class="nav-item nav-link"href="{{ path('app_login') }}">Recruteur</a>
-                    <a  class="nav-item nav-link"href="{{ path('app_login') }}">Candidat</a>
-                    
+                        {# Début de  gestion des droits du Consultant #} 
+                         {# or app.request.attributes.get('_route') == 'app_annonce_index'
+                                    or app.request.attributes.get('_route') == 'app_candidat_index'
+                                    or app.request.attributes.get('_route') == 'app_candidature_index'                         #}
+                        {% if app.user %}
+                            {% if 'ROLE_CANDIDAT' in app.user.roles %}
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') == 'app_annonce_index'
+                                    or app.request.attributes.get('_route') == 'app_candidat_edit'
+                                    %}active{% endif %}"" data-bs-toggle="dropdown">Candidat</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                        {# Début validation Modifier Profil #}                                       
+                                        <a href="{{ path('app_candidat_edit', {'id': app.user.id}) }}" class="dropdown-item">Modifier votre profil</a>                 
+                                        {# Fin validation  Modifier Profil  #}
+                                        {# Début validation Annonce #}     
+                                        <a href="{{ path('app_candidature_index') }}" class="dropdown-item">S'inscrire pour une Annonce</a>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <a class="nav-item nav-link" href="{{ path('app_login') }}">Candidat</a>
+                            {% endif %}
+                        {% else %}
+                            <a class="nav-item nav-link" href="{{ path('app_login') }}">Candidat</a>
+                        {% endif %}
+                            
+                            {# Fin de  gestion des droits du Candidat #}                    
                     <a href="contact.html" class="nav-item nav-link mr-4">Contact</a>
                     <a class="nav-item nav-link mr-4" style="margin-right:50px">      </a>
                    {% if app.user %}
-                        {% if 'ROLE_CONSULTANT' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+                        {% if 'ROLE_CONSULTANT' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or 'ROLE_CANDIDAT' in app.user.roles  %}
                             <a href="{{ path('app_logout') }}" class="nav-item nav-link mr-4 text-danger" style="margin-right:50px">Déconnexion</a>
                         {% endif %}
                     {% endif %}

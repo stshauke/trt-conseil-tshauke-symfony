@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Security;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -17,9 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use App\Entity\Utilisateur;
 use Twig\Environment;
-
 
 class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -30,7 +28,6 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     private $templating;
     private $twig;
     public const LOGIN_ROUTE = 'app_login';
-    
 
     public function __construct(AuthorizationCheckerInterface $authorizationChecker, UrlGeneratorInterface $urlGenerator, Environment $twig)
     {
@@ -57,24 +54,42 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         $user = $token->getUser();
-        
-            if ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                return new RedirectResponse($this->urlGenerator->generate('app_consultant_index'));
-            } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CONSULTANT')) {
-            return new RedirectResponse($this->urlGenerator->generate('app_utilisateur_index'));// C'est la page recruteur
-            } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CANDIDAT')) {
-            return new RedirectResponse($this->urlGenerator->generate('app_candidat'));
-            } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ENTREPRENEUR')) {
-            return new RedirectResponse($this->urlGenerator->generate('app_recruteur'));
-            }
+    
+        if ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_consultant_index'));
+        } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CONSULTANT')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_utilisateur_index'));
+        } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_CANDIDAT')) {
+            // Vérifier la colonne status pour le candidat
+            if ($user instanceof Utilisateur) {
+                if ($user->isStatus()) {
+                    return new RedirectResponse($this->urlGenerator->generate('app_annonce_index'));
+                } else {
+                    //return $this->logout($request, new RedirectResponse($this->urlGenerator->generate('home.index', ['inactive_account' => true])), $token);
+                    return new RedirectResponse($this->urlGenerator->generate('app_logout'));
 
-return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
-        
-        return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
-    }
+                }
+            }
+                } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ENTREPRENEUR')) {
+                    return new RedirectResponse($this->urlGenerator->generate('app_recruteur'));
+                }
+            
+                // Aucune condition n'a été satisfaite, retourne null
+                return null;
+            }
 
     public function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
+
+                public function logout(Request $request, RedirectResponse $response, TokenInterface $token): RedirectResponse
+            {
+                $session = $request->getSession();
+                if ($session) {
+                    $session->invalidate(); // Invalidates the current session
+                }
+
+                return $response;
+            }
 }

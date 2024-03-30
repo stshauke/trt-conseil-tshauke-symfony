@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Route('/annonce')]
 class AnnonceController extends AbstractController
@@ -18,7 +19,10 @@ class AnnonceController extends AbstractController
     #[Route('/', name: 'app_annonce_index', methods: ['GET'])]
     public function index(Request $request,AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
     {
-
+        if (!$this->isGranted('ROLE_CANDIDAT') and !$this->isGranted('ROLE_CONSULTANT')) {
+            $accessDeniedRoute = $this->generateUrl('app_access_denied'); // Remplacez 'access_denied' par le nom de votre route d'accès refusé
+            return new RedirectResponse($accessDeniedRoute);
+        }
           // Récupérer le terme de recherche depuis la requête
             $searchTerm = $request->query->get('search');
 
@@ -35,7 +39,8 @@ class AnnonceController extends AbstractController
             if ($searchTerm) {
                 $queryBuilder
                     ->leftJoin('an.Utilisateur', 'u')
-                    ->andWhere('an.descriptionAnnonce LIKE :searchTerm OR an.lieuTravail LIKE :searchTerm  
+                    ->andWhere('an.descriptionAnnonce LIKE :searchTerm OR an.posteDemandee LIKE :searchTerm
+                       OR an.lieuTravail LIKE :searchTerm
                     OR an.dateAnnonce LIKE :searchTerm OR u.nom LIKE :searchTerm OR u.prenom LIKE :searchTerm')
                     ->setParameter('searchTerm', '%'.$searchTerm.'%');
             }

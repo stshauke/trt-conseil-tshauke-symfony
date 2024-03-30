@@ -71,6 +71,7 @@ class CandidatController extends AbstractController
     #[Route('/new', name: 'app_candidat_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        
         $utilisateur = new Utilisateur();
         $form = $this->createForm(Utilisateur1Type::class, $utilisateur);
         $form->handleRequest($request);
