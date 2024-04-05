@@ -36,10 +36,10 @@ class Annonce
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $posteDemandee = null;
 
-    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'annonce', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'annonce', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $Annonce;
 
-    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'Candidature')]
+    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'Candidature', cascade: ['persist', 'remove'])]
     private Collection $candidatures;
 
     public function __construct()
@@ -169,13 +169,23 @@ class Annonce
     {
         if (!$this->candidatures->contains($candidature)) {
             $this->candidatures->add($candidature);
-           
+            // $candidature->setCandidature($this);
         }
 
         return $this;
     }
 
-    
+    public function removeCandidature(Candidature $candidature): static
+    {
+        if ($this->candidatures->removeElement($candidature)) {
+            // set the owning side to null (unless already changed)
+            // if ($candidature->getCandidature() === $this) {
+            //     $candidature->setCandidature(null);
+            // }
+        }
+
+        return $this;
+    }
 
 
     

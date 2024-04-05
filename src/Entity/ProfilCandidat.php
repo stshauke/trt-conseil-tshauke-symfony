@@ -19,6 +19,10 @@ class ProfilCandidat
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $poste = null;
 
+    #[ORM\ManyToOne(inversedBy: 'profilCandidats')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $Utilisateur = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +48,18 @@ class ProfilCandidat
     public function setPoste(?string $poste): static
     {
         $this->poste = $poste;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->Utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $Utilisateur): static
+    {
+        $this->Utilisateur = $Utilisateur;
 
         return $this;
     }

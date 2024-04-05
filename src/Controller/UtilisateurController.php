@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\ProfilRecruteur;
+use App\Entity\ProfilCandidat;
 use App\Entity\Utilisateur;
 use App\Form\UtilisateurRecruteurType;
+use App\Form\UtilisateurCandidatType;
 use App\Form\ProfilRecruteurType;
 use App\Repository\ProfilRecruteurRepository;
 use DateTimeZone;
@@ -109,7 +111,74 @@ class UtilisateurController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    #[Route('/candidat/new', name: 'app_candidats_new', methods: ['GET', 'POST'])]
+    public function newCandidat(Request $request, UserPasswordHasherInterface $userPasswordHasher,
+     EntityManagerInterface $entityManager): Response
+    {
+        $utilisateur = new Utilisateur(); 
+       $profilCandidat = new ProfilCandidat(); // Créez un nouvel objet ProfilCandidat
 
+       $form = $this->createForm(UtilisateurCandidatType::class, $utilisateur, [
+        'attr' => ['enctype' => 'multipart/form-data'],
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $utilisateur ->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $utilisateur ,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+            $utilisateur = $form->getData();
+            // Remplir les autres champs de votre utilisateur
+            $currentDateTime = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+            $utilisateur->setDateCreation($currentDateTime);
+            $utilisateur->setStatus(0);
+            $utilisateur->setRoles(['ROLE_CANDIDAT']);
+
+
+            
+            //$profilCandidat->setCv($request->request->get("cv"));
+// Gérer le téléchargement du fichier PDF
+$cvFile = $form->get('cv')->getData();
+
+if ($cvFile) {
+    $cvFileName = uniqid().'.'.$cvFile->guessExtension();
+    $cvFile->move(
+        $this->getParameter('cv_directory'),
+        $cvFileName
+    );
+
+    $profilCandidat->setCv($cvFileName);
+}
+
+
+
+
+
+            $profilCandidat->setPoste($request->request->get("poste"));
+            $utilisateur->addProfilCandidat($profilCandidat);
+
+            $entityManager->persist($utilisateur);
+            // Cette ligne indique à Doctrine de "persister" l'entité utilisateur. 
+            // Cela signifie que l'entité est ajoutée au gestionnaire d'entités et sera gérée par Doctrine par 
+            // la suite. Elle est généralement utilisée pour préparer une entité à être insérée dans 
+            // la base de données.
+            $entityManager->flush();
+            // Cette ligne déclenche effectivement l'écriture de toutes les modifications en attente 
+            // des entités gérées dans la base de données. 
+            return $this->redirectToRoute('app_utilisateur_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        // Si la condition n'est pas remplie, retourner le rendu du formulaire avec les données actuelles
+        return $this->render('candidat/new.html.twig', [
+            'utilisateur' => $utilisateur,
+            'form' => $form->createView(),
+        ]);
+    }
 
     #[Route('/{id}', name: 'app_utilisateur_show', methods: ['GET'])]
     public function show($id,Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response

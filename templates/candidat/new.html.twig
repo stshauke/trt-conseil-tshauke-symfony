@@ -1,11 +1,137 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Utilisateur{% endblock %}
+{% block title %}Candidat{% endblock %}
 
 {% block body %}
-    <h1>Create new Utilisateur</h1>
+    <div class="container">
+        <h2 class="text-center mt-5 mb-1">Inscription d'un nouveau Candidat </h2>
+	 
+        <div class="card">
+            <div class="card-header">
+                <div class="text-center">
+                </div>
+            </div>
+            <div class="card-body">                
+                {{ form_start(form) }}
+                <div class="row">
+					<div class="col-md-6">
+					<h5>Informations sur le Candidat</h5>
+											<hr class="border border-success border-2">
 
-    {{ include('candidat/_form.html.twig') }}
+						{% for field in form %}
+    {% if field.vars.name != 'cv' %}
+        {% if field.vars.name != '_token' %}
+		 {% if field.vars.name != 'agree_terms' %}
+            {% if field.vars.name == 'status' or field.vars.name == 'roles' or field.vars.name == 'dateCreation' %}
+                {% do form[field.vars.name].setRendered() %}
+            {% else %}
+                <div class="row">
+                    <div class="col-md-3 mb-3 label-column">
+                        {{ form_label(field) }}
+                    </div>
+                    <div class="col-md-9 mb-3">
+                        {% if field.vars.block_prefixes[1] == 'text' %}
+                            {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+							 <span class="text-danger">{{ form_errors(field) }}</span>
+                        {% else %}
+                            {{ form_widget(field) }}
+							 <span class="text-danger">{{ form_errors(field) }}</span>
+                        {% endif %}
+                        <span class="text-danger">{{ form_errors(field) }}</span>
+                        {# Afficher les erreurs spécifiques à ce champ #}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+	 {% endif %}
+{% endfor %}
+					</div>
+					<div class="col-md-6">
+						<h5>Profil candidat</h5>
+						<hr class="border border-success border-2 opacity-90">
 
-    <a href="{{ path('app_candidat_index') }}">back to list</a>
+						<div class="row">
+                    <div class="col-md-3 mb-3 label-column">
+							<label  class="form-label">Télécharger CV</label>
+						</div>
+						<div class="col-md-9 mb-3">
+							{{ form_row(form.cv, {'attr': {'class': 'form-control'}}) }}
+							{# <input type="file" class="form-control" name="cv" value=""> #}
+						</div>
+						</div>
+						<div class="row">
+                    <div class="col-md-3 mb-3 label-column">
+							<label class="form-label">Votre Poste</label>
+							</div>
+							<div class="col-md-9 mb-3">
+							<input type="text" class="form-control" name="poste" value="">
+						</div>
+						</div
+					</div>
+                </div>
+				</div>
+                <div class="row card-footer">
+    <div class="col-md-6">
+    <div class="form-check">
+        {{ form_label(form.agree_terms, null, {'label_attr': {'class': 'form-check-label'}}) }}
+        {{ form_widget(form.agree_terms, {'attr': {'class': 'form-check-input'}}) }}
+    </div>
+</div>
+    <div class="col-md-6 text-start">
+        <button class="btn btn-outline-success me-2">Enregistrer</button>
+    </div>
+</div>
+{{ form_end(form) }}
+            </div>
+           
+        </div>
+    </div>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+{# {% extends 'base.html.twig' %}
+
+{% block title %}Edit Utilisateur
+{% endblock %}
+
+{% block body %}
+	<h1>Edit Utilisateur</h1>
+	{{ form_start(form) }}
+	{{ form_errors(form) }}
+
+
+	<h3>Informations Utilisateur</h3>
+	{{ form_row(form.email) }}
+	{{ form_row(form.plainPassword) }}
+	{{ form_row(form.nom) }}
+	{{ form_row(form.prenom) }}
+	{{ form_row(form.status) }}
+	{{ form_row(form.roles) }}
+
+	<h3>Informations Profil Recruteur</h3>
+	<div class="mb-3">
+		<label>Nom entreprise</label>
+		<input type="text" name="nomEntreprise" value="{{profilRecruteur.nomEntreprise}}"></div>
+	<div class="mb-3">
+		<label>Address Entreprise</label>
+		<input type="text" name="addressEntreprise" value="{{profilRecruteur.adresseEntreprise}}">
+	</div>
+
+
+	<button type="submit" class="btn btn-primary">Enregistrer</button>
+	{{ form_end(form) }}
+
+
+	<a href="{{ path('app_utilisateur_index') }}">back to list</a>
+
+	{{ include('utilisateur/_delete_form.html.twig') }}
+{% endblock %} #}

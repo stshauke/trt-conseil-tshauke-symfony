@@ -70,13 +70,28 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
                 }
             }
-                } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ENTREPRENEUR')) {
-                    return new RedirectResponse($this->urlGenerator->generate('app_recruteur'));
+                
+        ///////////////////////////Recruteur
+        } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_RECRUTEUR')) {
+            // Vérifier la colonne status pour le candidat
+            if ($user instanceof Utilisateur) {
+                if ($user->isStatus()) {
+                    return new RedirectResponse($this->urlGenerator->generate('app_annonce_index'));
+                } else {
+                    //return $this->logout($request, new RedirectResponse($this->urlGenerator->generate('home.index', ['inactive_account' => true])), $token);
+                    return new RedirectResponse($this->urlGenerator->generate('app_logout'));
+
                 }
+            }
+        
+            // } elseif ($user instanceof UserInterface && $this->authorizationChecker->isGranted('ROLE_ENTREPRENEUR')) {
+            //         return new RedirectResponse($this->urlGenerator->generate('app_recruteur'));
+            //     }
             
                 // Aucune condition n'a été satisfaite, retourne null
                 return null;
             }
+        }
 
     public function getLoginUrl(Request $request): string
     {
@@ -92,4 +107,5 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
                 return $response;
             }
+    
 }

@@ -55,8 +55,13 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: ProfilRecruteur::class, mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
     private Collection $profilRecruteurs;
 
-    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'Utilisateur')]
+     #[ORM\OneToMany(targetEntity: ProfilCandidat::class, mappedBy: 'Utilisateur', cascade: ['persist', 'remove'])]
+    private Collection $profilCandidats;
+
+    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'Utilisateur', cascade: ['persist', 'remove'])]
     private Collection $candidatures;
+
+   
 
 
     public function __construct()
@@ -64,6 +69,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->annonces = new ArrayCollection();
         $this->profilRecruteurs = new ArrayCollection();
         $this->candidatures = new ArrayCollection();
+        $this->profilCandidats = new ArrayCollection();
     }
 
     
@@ -280,6 +286,36 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($candidature->getUtilisateur() === $this) {
                 $candidature->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProfilCandidat>
+     */
+    public function getProfilCandidats(): Collection
+    {
+        return $this->profilCandidats;
+    }
+
+    public function addProfilCandidat(ProfilCandidat $profilCandidat): static
+    {
+        if (!$this->profilCandidats->contains($profilCandidat)) {
+            $this->profilCandidats->add($profilCandidat);
+            $profilCandidat->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfilCandidat(ProfilCandidat $profilCandidat): static
+    {
+        if ($this->profilCandidats->removeElement($profilCandidat)) {
+            // set the owning side to null (unless already changed)
+            if ($profilCandidat->getUtilisateur() === $this) {
+                $profilCandidat->setUtilisateur(null);
             }
         }
 

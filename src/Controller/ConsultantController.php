@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Utilisateur;
 use App\Form\UtilisateurType;
+use App\Form\Utilisateur1Type;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
+use DateTimeZone;
 
 #[Route('/consultant')]
 class ConsultantController extends AbstractController
@@ -21,10 +22,11 @@ class ConsultantController extends AbstractController
     #[Route('/', name: 'app_consultant_index', methods: ['GET'])]
     public function index(Request $request,UtilisateurRepository $utilisateurRepository, PaginatorInterface $paginator): Response
     {
-        if (!$this->isGranted('ROLE_CONSULTANT')) {
-            $accessDeniedRoute = $this->generateUrl('app_access_denied'); // Remplacez 'access_denied' par le nom de votre route d'accès refusé
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_CONSULTANT')) {
+            $accessDeniedRoute = $this->generateUrl('app_access_denied');
             return new RedirectResponse($accessDeniedRoute);
         }
+        
         // Récupérer le terme de recherche depuis la requête
         $searchTerm = $request->query->get('search');
 
@@ -78,13 +80,19 @@ class ConsultantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-             // encode the plain password
-             $utilisateur ->setPassword(
+            // encode the plain password
+            $utilisateur ->setPassword(
                 $userPasswordHasher->hashPassword(
                     $utilisateur ,
                     $form->get('plainPassword')->getData()
                 )
             );
+            $utilisateur = $form->getData();
+            // Remplir les autres champs de votre utilisateur
+            $currentDateTime = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+            $utilisateur->setDateCreation($currentDateTime);
+            $utilisateur->setStatus(1);
+            $utilisateur->setRoles(['ROLE_CONSULTANT']);
             $entityManager->persist($utilisateur);
             $entityManager->flush();
 
@@ -94,9 +102,9 @@ class ConsultantController extends AbstractController
         return $this->render('consultant/new.html.twig', [
             'utilisateur' => $utilisateur,
             'form' => $form,
-            'button_label' => 'Enregistrer',
         ]);
     }
+    
 
     #[Route('/{id}', name: 'app_consultant_show', methods: ['GET'])]
     public function show(Utilisateur $utilisateur): Response

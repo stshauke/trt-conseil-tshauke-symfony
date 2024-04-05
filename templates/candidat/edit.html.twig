@@ -4,7 +4,11 @@
 
 {% block body %}
     <div class="container">
-         <h2 class="text-center mt-5 mb-1">Modification des informations du candidat numéro: 
+         <h2 class="text-center mt-5 mb-1">Modification des informations du 
+          {% if is_granted('ROLE_CANDIDAT') %} Candidat{% endif %}
+            {% if is_granted('ROLE_RECRUTEUR') %} Recruteur{% endif %}
+          
+          numéro: 
 	 <span class="text-success">{{ utilisateur.id }}</span></h2>
         <div class="card">
             <div class="card-header">
@@ -46,7 +50,9 @@
 {% endfor %}
 <div class="card-footer">
                 <div class="text-center">
+                 {% if is_granted('ROLE_CONSULTANT') %}
                     <a href="{{ path('app_utilisateur_index') }}" class="btn btn-outline-secondary me-2">Retour à la liste</a>
+                  {% endif %}  
                     <button class="btn btn-outline-success me-2">Enregistrer</button>
                 </div>
 			

@@ -23,6 +23,7 @@ class AnnonceType extends AbstractType
                 ],
                 'required' => false, // Optionnel : Si le champ n'est pas obligatoire
             ])
+            ->add('posteDemandee')
             ->add('lieuTravail')
             ->add('dateAnnonce')
             ->add('status')

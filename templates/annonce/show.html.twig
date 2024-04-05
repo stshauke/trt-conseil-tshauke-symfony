@@ -4,12 +4,16 @@
  
 {% block body %}
     <div class="container">
-        <h2 class="text-center mt-5 mb-3">Afficher la description de l'annonce numéro:
+        <h2 class="text-center mt-5 mb-3">Description de l'annonce numéro:
         <span class="text-success">{{ annonce.id }}</span></h2>
         <div class="card">
             <div class="card-header">
-                <div class="text-center">
-               
+                <div class="text-center mb-0 mt-0">
+                    {% if isUserRegistered %}
+                        <div class="alert alert-danger mb-0 mt-0" role="alert">
+                            <b>Vous êtes déjà inscrit pour cette annonce.</b>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="card-body">
@@ -61,7 +65,7 @@
         <b >Status:</b>
     </div>
     <div class="col-sm-9">
-        <p>{{ annonce.status ? 'Annonce approuvée' : 'Annonce non approuvée encore' }}</p>
+        <p>{{ annonce.status ? 'Yes' : 'No' }}</p>
     </div>
 </div>
             
@@ -70,8 +74,54 @@
              <div class="card-footer">
               <div class="text-center">
                     <a href="{{ path('app_annonce_index') }}" class="btn btn-secondary me-2">Retour à la liste</a>
+                     {% if is_granted('ROLE_CANDIDAT') %}
+                    {% if not isUserRegistered %}
+                        <button class="btn btn-success" onclick="ajouterCandidature('{{ annonce.id }}', '{{ app.user.id }}')">Postuler pour cette annonce</button>
+                    {% endif %}
+                    {% endif %}
                 </div>
              </div>
         </div>
     </div>
+
+
+{% block javascripts %}
+    <script>
+    // Fonction pour envoyer une requête AJAX pour créer une nouvelle candidature
+   function ajouterCandidature(annonceId, userId) {
+    // Données à envoyer dans la requête AJAX
+    var data = {
+        annonceId: annonceId,
+        userId: userId  // Ajouter également le userId aux données
+    };
+
+    // Afficher le contenu de data dans la console
+    console.log('Contenu de data :', data);
+
+    // Créer une nouvelle instance de l'objet XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+
+    // Définir la fonction de rappel lorsqu'une réponse est reçue
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log('La requête a été envoyée avec succès !');
+            } else {
+                console.error('Erreur lors de l\'envoi de la requête : ' + xhr.statusText);
+            }
+        }
+    };
+
+    // Ouvrir la requête avec la méthode POST et l'URL appropriée
+    xhr.open('POST', '{{ path('app_candidature_ajax_new') }}', true);
+    
+    // Définir l'en-tête Content-Type
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    // Convertir les données en JSON et envoyer la requête
+    xhr.send(JSON.stringify(data));
+}
+</script>
+{% endblock %}
+
 {% endblock %}
