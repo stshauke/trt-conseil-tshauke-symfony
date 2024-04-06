@@ -15,6 +15,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Utilisateur;
 use App\Entity\Candidature;
+use DateTimeZone;
+use Symfony\Component\Security\Core\Security;
+
+use DateTime;
 
 #[Route('/annonce')]
 class AnnonceController extends AbstractController
@@ -81,10 +85,26 @@ class AnnonceController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $annonce = new Annonce();
+        $utilisateur = new Utilisateur(); 
+       
         $form = $this->createForm(AnnonceType::class, $annonce);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
+            //  // Remplir les autres champs de votre utilisateur
+           
+        // Définir une date par défaut pour la date de l'annonce
+        $annonce = $form->getData();
+        $currentDateTime = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+        $annonce->setDateCreation($currentDateTime);
+             $utilisateur->setStatus(0);
+             
+                // Définir l'utilisateur en cours comme propriétaire de l'annonce
+                $annonce->setUtilisateur($utilisateur);
+
+
             $entityManager->persist($annonce);
             $entityManager->flush();
 

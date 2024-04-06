@@ -16,6 +16,10 @@
                 <div class="row">
                     {% for field in form %}
                         {% if field.vars.name != '_token' %}
+                         {% if field.vars.name == 'status' 
+                         or field.vars.name == 'roles' or field.vars.name == 'dateAnnonce' %}
+                {% do form[field.vars.name].setRendered() %}
+            {% else %}
                             <div class="col-md-3 mb-3 label-column">
                                 {{ form_label(field) }}
                             </div>
@@ -23,6 +27,7 @@
                                 {{ form_widget(field) }}
                             </div>
                         {% endif %}
+                     {% endif %}    
                     {% endfor %}
                 </div>
             </div>

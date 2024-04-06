@@ -18,7 +18,7 @@ class AnnonceType extends AbstractType
             ->add('descriptionAnnonce', TextareaType::class, [
                 'attr' => [
                     'class' => 'tinymce',
-                    'maxlength' => '255',
+                    'maxlength' => '1024',
                     'style' => 'width: 100%;'
                 ],
                 'required' => false, // Optionnel : Si le champ n'est pas obligatoire

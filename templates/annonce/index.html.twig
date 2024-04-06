@@ -17,9 +17,14 @@
                         <div class="row justify-content-between">
                                          
 
-                            <div class="col-sm-auto">
-                                
+                           <div class="col-sm-auto">
+                            {% if is_granted('ROLE_RECRUTEUR') %}
+                                <a class="btn btn-outline-primary" href="{{ path('app_annonce_new') }}">
+                                    <i class="fas fa-plus"></i> <!-- Icône pour créer un nouveau module -->
+                                </a>
+                                {% endif %}
                             </div>
+
                             <div class="col-sm-auto">
                                 <form class="d-flex" role="search" id="searchForm">
                                     <div class="form-group">
@@ -44,8 +49,12 @@
                 <th>Date Annonce</th>
                  {% if is_granted('ROLE_CONSULTANT') %}
                 <th>Status</th>  
-                {% endif %}                     
-                        <th width="110px">Action</th>
+                {% endif %}
+                 {% if is_granted('ROLE_RECRUTEUR') %}
+                    <th width="160px">Action</th>
+                 {% else %}                     
+                    <th width="110px">Action</th>
+                {% endif %}
                     </tr>
                      {% for annonce  in pagination %}
                     <tr>
@@ -78,11 +87,17 @@
     <p>Aucun utilisateur connecté.</p>
 {% endif %} #}
 
-                            <form method="post" action="{{ path('app_annonce_delete', {'id': annonce.id}) }}" onsubmit="return confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?');">
+    <form method="post" action="{{ path('app_annonce_delete', {'id': annonce.id}) }}" onsubmit="return confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?');">
     <a class="btn btn-outline-info" href="{{ path('app_annonce_show', {'id': annonce.id}) }}">
         <i class="fas fa-eye"></i> <!-- Icône pour afficher -->
     </a>
-    {% if is_granted('ROLE_CONSULTANT') %}
+     {% if is_granted('ROLE_RECRUTEUR') %}
+      <a class="btn btn-outline-success" href="{{ path('app_annonce_edit', {'id': annonce.id}) }}">
+        <i class="fas fa-edit"></i> <!-- Icône pour éditer -->
+    </a>
+    {% endif %}
+    {% if is_granted('ROLE_CONSULTANT') or is_granted('ROLE_RECRUTEUR') %}
+     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ annonce.id) }}">
         <button class="btn btn-outline-danger" type="submit">
             <i class="fas fa-trash-alt"></i> <!-- Icône pour supprimer -->
         </button>
