@@ -66,6 +66,7 @@
                                     <div class="nav-item dropdown">
                                         <a href="#" class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') == 'app_utilisateur_index'
                                         or app.request.attributes.get('_route') == 'app_annonce_index'
+                                         or app.request.attributes.get('_route') == 'app_annonce_new'
                                         or app.request.attributes.get('_route') starts with 'app_annonce_show'
                                         or app.request.attributes.get('_route') == 'app_candidat_edit'
                                         %}active{% endif %}"" data-bs-toggle="dropdown">Recruteur</a>

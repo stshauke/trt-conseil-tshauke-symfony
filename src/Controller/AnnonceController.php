@@ -15,10 +15,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Utilisateur;
 use App\Entity\Candidature;
-use DateTimeZone;
+
 use Symfony\Component\Security\Core\Security;
 
-use DateTime;
+use DateTimeZone;
 
 #[Route('/annonce')]
 class AnnonceController extends AbstractController
@@ -91,18 +91,21 @@ class AnnonceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-
-            //  // Remplir les autres champs de votre utilisateur
-           
-        // Définir une date par défaut pour la date de l'annonce
-        $annonce = $form->getData();
-        $currentDateTime = new \DateTime('now', new DateTimeZone('Europe/Paris'));
-        $annonce->setDateCreation($currentDateTime);
-             $utilisateur->setStatus(0);
+            //  // Remplir les autres champs de votre utilisateur           
+            // Définir une date par défaut pour la date de l'annonce
+            $annonce = $form->getData();
+            $currentDateTime = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+            $annonce->setDateAnnonce($currentDateTime);        
+            $annonce->setStatus(0);
              
-                // Définir l'utilisateur en cours comme propriétaire de l'annonce
-                $annonce->setUtilisateur($utilisateur);
+           // Récupérer l'utilisateur courant
+            $utilisateurCourant =$this->getUser();
+          
+            // Vérifier si un utilisateur est authentifié
+            if ($utilisateurCourant !== null) {
+                // Associer l'utilisateur courant à l'annonce
+                $annonce->setUtilisateur($utilisateurCourant);
+            }
 
 
             $entityManager->persist($annonce);
@@ -146,6 +149,22 @@ class AnnonceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //  // Remplir les autres champs de votre utilisateur           
+            // Définir une date par défaut pour la date de l'annonce
+            $annonce = $form->getData();
+            $currentDateTime = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+            $annonce->setDateAnnonce($currentDateTime);        
+            $annonce->setStatus(0);
+             
+           // Récupérer l'utilisateur courant
+            $utilisateurCourant =$this->getUser();
+          
+            // Vérifier si un utilisateur est authentifié
+            if ($utilisateurCourant !== null) {
+                // Associer l'utilisateur courant à l'annonce
+                $annonce->setUtilisateur($utilisateurCourant);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_annonce_index', [], Response::HTTP_SEE_OTHER);

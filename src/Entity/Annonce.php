@@ -23,7 +23,7 @@ class Annonce
 
     
     
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateAnnonce = null;
 
     #[ORM\Column]
@@ -84,12 +84,12 @@ class Annonce
         return $this->dateAnnonce;
     }
 
-    public function setDateAnnonce(\DateTimeInterface $dateAnnonce): static
-    {
-        $this->dateAnnonce = $dateAnnonce;
+    public function setDateAnnonce(?\DateTimeInterface $dateAnnonce): static
+{
+    $this->dateAnnonce = $dateAnnonce;
 
-        return $this;
-    }
+    return $this;
+}
 
     public function isStatus(): ?bool
     {

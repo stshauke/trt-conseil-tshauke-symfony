@@ -15,4 +15,18 @@ class ContactController extends AbstractController
             'controller_name' => 'ContactController',
         ]);
     }
+    #[Route('/faqs', name: 'app_faqs')]
+        public function indexFaqs(): Response
+        {
+            return $this->render('contact/index_faqs.html.twig', [
+                'controller_name' => 'ContactController',
+            ]);
+        }
+    #[Route('/help', name: 'app_help')]
+    public function indexhelp(): Response
+    {
+        return $this->render('contact/index_help.html.twig', [
+            'controller_name' => 'ContactController',
+        ]);
+    }
 }
