@@ -43,7 +43,7 @@ class AnnonceController extends AbstractController
         $currentPage = $request->query->getInt('page', 1);
 
         // Nombre d'éléments par page
-        $itemsPerPage = 6;
+        $itemsPerPage = 2;
 
         // Créer une requête Doctrine pour récupérer les annonces
         $queryBuilder = $annonceRepository->createQueryBuilder('an');
